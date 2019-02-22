@@ -23,16 +23,17 @@ const moment = require('moment');
         // merged scrape
         const merged = await page.$$('div.table-bets__main-row-holder');
         console.log('all divs are selected');
-        let now = moment().format('h:mm:ss a');
-        await fs.writeFile(`out ${now}.csv`, 'team1,odds1,team2,odds2\n');
+        await fs.writeFile(`out.csv`, 'team1,odds1,team2,odds2\n');
 
         for (const row of merged) {
             const table = await row.$eval('div.table-bets__cols-holder', div => div.innerText);
             console.log('table flipped');
             retable = table.replace(/\n/ig, ',');
             console.log('table data:', retable);
-            await fs.appendFile(`out ${now}.csv`, `${retable}\n`);
+            await fs.appendFile(`out.csv`, `${retable}\n`);
         };
+        const timenow = moment().format('hh_mm_ss');
+        fs.renameSync('out.csv', `out ${timenow}.csv`);
 
     console.log('done');
     await browser.close();
