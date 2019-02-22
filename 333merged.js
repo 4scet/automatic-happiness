@@ -20,20 +20,18 @@ const moment = require('moment');
         await page.click('button.act.filters__table-style-link[data-title="Future matches first"]');
         console.log('only future matches');
 
+        const timenow = moment().format('hh_mm');
+        await fs.writeFile(`out ${timenow}.csv`, 'team1,odds1,team2,odds2\n');
         // merged scrape
         const merged = await page.$$('div.table-bets__main-row-holder');
         console.log('all divs are selected');
-        await fs.writeFile(`out.csv`, 'team1,odds1,team2,odds2\n');
 
         for (const row of merged) {
             const table = await row.$eval('div.table-bets__cols-holder', div => div.innerText);
-            console.log('table flipped');
-            retable = table.replace(/\n/ig, ',');
+            let retable = await table.replace(/\n/ig, ',');
             console.log('table data:', retable);
-            await fs.appendFile(`out.csv`, `${retable}\n`);
+            await fs.appendFile(`out ${timenow}.csv`, `${retable}\n`);
         };
-        const timenow = moment().format('hh_mm_ss');
-        fs.renameSync('out.csv', `out ${timenow}.csv`);
 
     console.log('done');
     await browser.close();
