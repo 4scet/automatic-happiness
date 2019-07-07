@@ -24,7 +24,7 @@ const moment = require('moment');
         console.log('only future matches');
 
         const timenow = moment().format('h_mm_ss');
-        await fs.writeFile(`out ${timenow}.csv`, 'team1,odds1,team2,odds2\n');
+        // await fs.writeFile(`out ${timenow}.csv`, 'team1,odds1,team2,odds2\n');
         // merged scrape
         const merged = await page.$$('div.table-bets__main-row-holder');
         console.log('all divs are selected');
